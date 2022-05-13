@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="stock_picking_type_inherit_view_form" model="ir.ui.view">
+            <field name="name">stock_picking_type_inherit_view_form</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sequence_code']" position="after">
+                    <field name="is_branch" />
+                    <field name="to_branch" attrs="{'invisible': [('is_branch', '=', False)]}"/>
+                    <field name="operation_type_branch" attrs="{'invisible': [('is_branch', '=', False)]}"/>
+                    <field name="is_receipt" attrs="{'invisible': [('is_branch', '=', True)]}" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

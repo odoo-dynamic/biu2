@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<odoo>
+        <record model="ir.ui.view" id="view_transfer_request_form">
+            <field name="name">transfer_request_form</field>
+            <field name="model">transfer.request</field>
+            <field name="arch" type="xml">
+                <form string="Transfer Request" version="7.0">
+                    <header>a
+                        <button name="submit" states="open" string="Submit Request" type="object" groups="sdt_branch_transfer.group_tr_submit" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_colors='{"valid":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_edit_only">
+                            <label for="name" class="oe_inline"/>
+                        </div>
+                        <h1>
+                            <field name="name" class="oe_inline" attrs="{'readonly': [('state','!=', 'open')],'invisible': [('name','=', False)]}"/>
+                        </h1>
+                        <group>
+                            <field name="date_request" attrs="{'readonly': [('state','!=', 'open')]}"/>
+                            <field name="request_from" force_save="1" readonly="1"/>
+                            <field name="request_to" attrs="{'readonly': [('state','!=', 'open')]}" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+                            <field name="description" attrs="{'readonly': [('state','!=', 'open')]}"/>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="line_ids" mode="tree,kanban" widget="section_and_note_one2many" attrs="{'readonly':[('state', '!=', 'open')]}">
+                                    <tree editable="bottom" >
+                                        <field name="product_id" options="{'no_create': True, 'no_quick_create': True, 'no_create_edit':True}"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_id"/>
+                                        <field name="qty_onhand" force_save="1" readonly="1"/>
+                                        <field name="qty_request"/>
+                                        <field name="qty_transfer" force_save="1" readonly="1"/>
+                                        <field name="qty_open" force_save="1" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_transfer_request_tree">
+            <field name="name">transfer_request_tree</field>
+            <field name="model">transfer.request</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state in ('open')" string="Transfer Request">
+                    <field name="name"/>
+                    <field name="date_request"/>
+                    <field name="request_from"/>
+                    <field name="request_to"/>
+                    <field name="description"/>
+                    <field name="state"/>
+                </tree>
+          </field>
+        </record>
+
+        <record id="view_transfer_request_search" model="ir.ui.view">
+            <field name="name">transfer_request_list_select</field>
+            <field name="model">transfer.request</field>
+            <field name="arch" type="xml">
+                <search string="Search Transfer Request">
+                    <field name="name" string="Transfer Request"/>
+                    <separator/>
+                    <field name="state"/>
+                    <filter name="state_open" string="open"
+                            domain="[('state','=','open')]"/>
+                    <filter name="state_submit" string="Submitted"
+                            domain="[('state','=','submit')]"/>
+                    <filter name="state_process" string="Processed"
+                            domain="[('state','=','process')]"/>
+                    <filter name="state_transfer" string="Transfered"
+                            domain="[('state','=','transfer')]"/>
+                    <filter name="state_cancel" string="Canceled"
+                            domain="[('state','=','cancel')]"/>
+                    <filter name="state_close" string="Close"
+                            domain="[('state','=','close')]"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Date Request" name="date_request" icon="terp-go-month" domain="[]" context="{'group_by':'date_request'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="transfer_request_form_action">
+            <field name="name">Transfer Request</field>
+            <field name="res_model">transfer.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_transfer_request_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to start a new Transfer Request process.
+              </p><p>
+                A Good Issued is an instruction to Transfer Request a certain quantity of materials,
+                so that they are available at a certain point in time.
+              </p>
+            </field>
+        </record>
+
+        <menuitem
+            id="menu_transfer_request_act"
+            sequence="1"
+            name="Transfer Request"
+            parent="stock.menu_stock_warehouse_mgmt"
+            action="transfer_request_form_action"
+            groups="base.group_user"
+            />
+
+</odoo>

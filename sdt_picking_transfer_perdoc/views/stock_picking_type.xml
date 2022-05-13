@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model='ir.ui.view' id='view_picking_type_form_inherit'>
+        <field name='name'>view.picking.type.form.inherit</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name='arch' type='xml'>
+            <xpath expr="//field[@name='warehouse_id']" position="after">
+                <field name="disallow_partial"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
