@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="seq_transfer_request" model="ir.sequence">
+            <field name="name">Transfer Request</field>
+            <field name="code">transfer.request</field>
+            <field name="prefix">TR1-</field>
+            <field name="padding">5</field>
+            <field name="company_id">1</field>
+        </record>
+         <record id="seq_transfer_request2" model="ir.sequence">
+            <field name="name">Transfer Request</field>
+            <field name="code">transfer.request</field>
+            <field name="prefix">TR2-</field>
+            <field name="padding">5</field>
+            <field name="company_id">2</field>
+        </record>
+         <record id="seq_transfer_request3" model="ir.sequence">
+            <field name="name">Transfer Request</field>
+            <field name="code">transfer.request</field>
+            <field name="prefix">TR3-</field>
+            <field name="padding">5</field>
+            <field name="company_id">3</field>
+        </record>
+    </data>
+
+</odoo>

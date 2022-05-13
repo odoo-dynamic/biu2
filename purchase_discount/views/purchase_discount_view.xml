@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="purchase_order_form_disc" model="ir.ui.view">
+            <field name="name">purchase.order.form.disc</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price_unit']" position="before">
+                    <field name="price_befdisc"/>
+                    <field name="discount"/>
+                </xpath>
+                <xpath expr="//field[@name='price_unit']" position="after">
+                    <field name="price_unit_tax"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
