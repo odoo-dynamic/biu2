@@ -1,0 +1,165 @@
+<odoo>
+    <data>
+        <record id="paperformat_sdt_standard_form" model="report.paperformat">
+            <field name="name">SDT Standard Form</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">80</field>
+        </record>
+        <report id="report_standard_payment"
+                string="SDT - Payment"
+                model="account.payment"
+                report_type="qweb-pdf"
+                file="account.payment"
+                name="sdt_form.standard_payment_report"
+                paperformat="sdt_form.paperformat_sdt_standard_form"
+                print_report_name="'SDT Payment - %s' % (object.name)"
+                >
+        </report>
+
+        <template id="payment_internal_layout" inherit_id="web.internal_layout" primary="True">
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header" style="font-Size:14px">
+                    <div class="row" >
+                        <div class="col-12">
+                            <h3><strong>PT. BUANA INTIPRIMA USAHA</strong></h3><br/>
+                            <span>PERGUDANGAN GREEN SEDAYU BIZPARK BLOK DM6 NO.3 SEMANAN, KALIDERES JAKARTA BARAT</span><br/>
+                            <span>Kota Administrasi Jakarta Barat DKI Jakarta</span><br/>
+                            <span>Indonesia</span>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="standard_payment_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="sdt_form.standard_payment_report_document"></t>
+                </t>
+            </t>
+        </template>
+
+        <template id ="standard_payment_report_document">
+             <t t-call="sdt_form.payment_internal_layout">
+           <!-- <div class="article o_report_layout_standard">-->
+                <div style="font-Size:14px" class="page">
+                    <style type="text/css">
+                        table, td {
+                            border: 1px solid black;
+                            border-left: 1px solid white;
+                            border-right: 1px solid white;
+                            }
+                        th {
+                            border: 1px solid black;
+                            border-left: 1px solid white;
+                            border-right: 1px solid white;
+                            }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            }
+                    </style>
+
+                    <div class="row mb32">
+                        <div class="col-6">
+                            <h6><strong>Kepada</strong></h6>
+                            <div t-field="doc.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                        </div>
+                        <div class="col-6">
+                            <h6><strong>PEMBAYARAN</strong></h6>
+                            <table>
+                                <tr>
+                                    <td style="border: 1px solid white">Nomor</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid white">Tanggal</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.date" t-options='{"format": "dd/MM/yyyy"}'/></td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid white">No. Cek</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.ref"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                        
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-left" style="border: 1px solid black; padding: 1px;">Nama Beban/Biaya</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">Nilai</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="lines_tbody">
+                            <t t-set="total" t-value="0"/>
+                            <tr t-foreach="doc.move_id.line_ids" t-as="line">
+                                <t t-set="total" t-value="total+line.amount_currency"/>
+                                <td class="text-left" style="border: 1px solid black; padding: 1px;"><span t-field="line.account_id.name"/></td>
+                                <td class="text-right" style="border: 1px solid black; padding: 1px;"><span t-field="line.amount_currency" t-options='{"widget": "float", "precision": 2}'/></td>
+                                <td class="text-left" style="border: 1px solid black; padding: 1px;"><span t-field="line.name"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="total">
+                        <div class="row">
+                            <div class="col-7">
+                                <strong>Keterangan</strong><br/>
+                                <span t-field="doc.narration"/>
+                            </div>
+                            <!-- <div class="col-5">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td style="padding: 1px; border: 1px solid white;" name="td_subtotal_label">Total</td>
+                                        <td class="text-right" style="padding: 1px; border: 1px solid white;">
+                                            <span t-esc="total"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div> -->
+                        </div>
+                    </div>
+                    <br/><br/>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6" style="text-align: center;">
+                            <span><b>Disetujui Oleh,</b></span><br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br>______________________________________</br><br/>
+                            <!-- <span style="text-align: left;">Tgl.</span> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6" style="text-align: left;">
+                            <span style="color: white">----------------</span>Tgl.
+                        </div>
+                    </div>
+                </div>
+             </t>
+        </template>
+    </data>
+</odoo>

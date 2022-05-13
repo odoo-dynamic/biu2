@@ -1,0 +1,40 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_deposit_account_payment_form">
+            <field name="name">	view_deposit_account_payment_form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_bank_id']" position="after">
+                    <field name="check_deposit" attrs="{'readonly':[('state','!=','draft')]}" />
+                    <field name="deposit_no" attrs="{'invisible':[('check_deposit','=',False)],'readonly':[('state','!=','draft')]}" />
+                    <field name="deposit_due" attrs="{'invisible':[('check_deposit','=',False)],'readonly':[('state','!=','draft')]}" />
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="account_payment_register_form_inherit">
+            <field name="name">	vaccount.payment.register.form.inherit</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="check_deposit" />
+                    <field name="deposit_no" attrs="{'invisible':[('check_deposit','=',False)]}"/>
+                    <field name="deposit_due" attrs="{'invisible':[('check_deposit','=',False)]}" />
+                </xpath>
+            </field>
+        </record>
+        <!-- <record model="ir.ui.view" id="view_deposit_account_payment_from_invoices">
+            <field name="name">	view_deposit_account_payment_from_invoices</field>
+            <field name="model">account.register.payments</field>
+            <field name="inherit_id" ref="account.view_account_payment_from_invoices"/>
+            <field name="arch" type="xml">
+                <field name="group_invoices" position="after">
+                    <field name="check_deposit"/>
+                    <field name="deposit_no" attrs="{'invisible':[('check_deposit','=',False)]}" />
+                    <field name="deposit_due" attrs="{'invisible':[('check_deposit','=',False)]}" />
+                </field>
+            </field>
+        </record> -->
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_deposit_move_line_tree">
+            <field name="name">view_deposit_move_line_tree</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="date" position="before">
+                    <field name="deposit_no" />
+                    <field name="deposit_due" />
+                </field>
+            </field>
+        </record>
+        <record id="view_deposit_move_line_search" model="ir.ui.view">
+            <field name="name">account.deposit.move.line.search</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="deposit_no" string="Deposit Number"/>
+                    <group string="Group By" name="groupby">
+                        <filter name="date_groupby" string="Deposit Due"
+                                context="{'group_by': 'deposit_due'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

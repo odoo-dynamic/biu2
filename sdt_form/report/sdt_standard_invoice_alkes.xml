@@ -1,0 +1,249 @@
+<odoo>
+    <data>
+        <record id="paperformat_sdt_standard_form" model="report.paperformat">
+            <field name="name">SDT Standard Form</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">80</field>
+        </record>
+        <report id="report_standard_invoice_alkes"
+                string="SDT - Invoice Alkes"
+                model="account.move"
+                report_type="qweb-pdf"
+                file="account.move"
+                name="sdt_form.standard_invoice_alkes_report"
+                paperformat="sdt_form.paperformat_sdt_standard_form"
+                print_report_name="'SDT Invoice Alkes - %s' % (object.name)"
+                >
+        </report>
+
+        <template id="invoice_alkes_internal_layout" inherit_id="web.internal_layout" primary="True">
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header" style="font-Size:14px">
+                    <div class="row" >
+                        <div class="col-6">
+                            <h6><strong>PT. BUANA INTIPRIMA USAHA</strong></h6>
+                            <span>PERGUDANGAN GREEN SEDAYU BIZPARK BLOK DM6 NO.3 SEMANAN, KALIDERES JAKARTA BARAT</span><br/>
+                            <span>Kota Administrasi Jakarta Barat DKI Jakarta</span><br/>
+                            <span>Indonesia</span>
+                            <table>
+                                <tr>
+                                    <td style="border: 1px solid white">Ijin Distribusi</td>
+                                    <td style="border: 1px solid white">&#160;:&#160;</td>
+                                    <td style="border: 1px solid white">FP.01.04/IV/0379-e/2020</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid white">NPWP</td>
+                                    <td style="border: 1px solid white">&#160;:&#160;</td>
+                                    <td style="border: 1px solid white">81.996.305.9-034.000</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <h6><strong>Yth :</strong></h6>
+                            <div t-field="doc.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            <table>
+                                <tr>
+                                    <td style="border: 1px solid white">NPWP</td>
+                                    <td style="border: 1px solid white">&#160;:&#160;</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.partner_id.vat"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="standard_invoice_alkes_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="sdt_form.standard_invoice_alkes_report_document"></t>
+                </t>
+            </t>
+        </template>
+
+        <template id ="standard_invoice_alkes_report_document">
+             <t t-call="sdt_form.invoice_alkes_internal_layout">
+           <!-- <div class="article o_report_layout_standard">-->
+                <div style="font-Size:14px" class="page">
+                    <style type="text/css">
+                        table, td {
+                            border: 1px solid black;
+                            border-left: 1px solid white;
+                            border-right: 1px solid white;
+                            }
+                        th {
+                            border: 1px solid black;
+                            border-left: 1px solid white;
+                            border-right: 1px solid white;
+                            }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            }
+                    </style>
+
+                    <!-- <div class="row mb32">
+                        <div class="col-6">
+                            <h6><strong>Dari</strong></h6>
+                            <div t-field="doc.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                        </div>
+                        <div class="col-6">
+                            <h6><strong>Faktur Pembelian</strong></h6>
+                            <table>
+                                <tr>
+                                    <td style="border: 1px solid white">No. Form</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white">No. Form</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid white">No. Faktur</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid white">Tanggal</td>
+                                    <td style="border: 1px solid white">:</td>
+                                    <td style="border: 1px solid white"><span t-field="doc.invoice_date" t-options='{"format": "dd/MM/yyyy"}'/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div> -->
+                    <br/><br/><br/>
+                    <h6 class="text-center"><strong>FAKTUR PENJUALAN</strong></h6>
+                        
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="text-center" style="border: 1px solid black; padding: 1px;">TANGGAL&#160;:&#160;<span t-field="doc.invoice_date" t-options='{"format": "dd/MM/yyyy"}'/></th>
+                                <th colspan="5" rowspan="2" class="text-center" style="border: 1px solid black; padding: 1px; vertical-align: middle;">TRADING</th>
+                                <th colspan="2" class="text-center" style="border: 1px solid black; padding: 1px;">J.TEMPO&#160;:&#160;<span t-field="doc.invoice_date_due" t-options='{"format": "dd/MM/yyyy"}'/></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="text-center" style="border: 1px solid black; padding: 1px;">NO.FAKTUR&#160;:&#160;<span t-field="doc.name"/></th>
+                                <th colspan="2" class="text-center" style="border: 1px solid black; padding: 1px;">SALES&#160;:&#160;<span t-field="doc.invoice_origin"/></th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">NO.</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">NAMA BARANG</th>
+                                <th colspan="2" class="text-center" style="border: 1px solid black; padding: 1px;">QTY.</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">ED</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">BATCH</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">HARGA</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">POTONGAN</th>
+                                <th class="text-center" style="border: 1px solid black; padding: 1px;">JUMLAH</th>
+                            </tr>
+                        </thead>
+                        <tbody class="lines_tbody">
+                            <t t-set="total" t-value="0"/>
+                            <t t-set="discount" t-value="0"/>
+                            <t t-set="LineNum" t-value="1"/>
+                            <tr t-foreach="doc.invoice_line_ids" t-as="line">
+                                <t t-set="subtotal" t-value="line.quantity*line.price_befdisc"/>
+                                <t t-set="total" t-value="total+subtotal"/>
+                                <t t-set="discount" t-value="discount+(subtotal-line.price_subtotal)"/>
+                                <td class="text-left" style="border: 1px solid black;"><span t-esc="LineNum"/></td>
+                                <td class="text-left" style="border: 1px solid black;"><span t-field="line.product_id.name"/></td>
+                                <td class="text-right" style="border: 1px solid black;"><span t-field="line.quantity" t-options='{"widget": "float", "precision": 2}'/></td>
+                                <td class="text-left" style="border: 1px solid black;"><span t-field="line.product_uom_id.name"/></td>
+                                <td class="text-center" style="border: 1px solid black;">-</td>
+                                <td class="text-center" style="border: 1px solid black;">-</td>
+                                <td class="text-right" style="border: 1px solid black;"><span t-field="line.price_befdisc" t-options='{"widget": "float", "precision": 2}'/></td>
+                                <td class="text-right" style="border: 1px solid black;"><span t-esc="subtotal" t-options='{"widget": "float", "precision": 2}'/></td>
+                                <td class="text-right" style="border: 1px solid black;"><span t-esc="subtotal" t-options='{"widget": "float", "precision": 2}'/></td>
+                                <t t-set="LineNum" t-value="LineNum+1"/>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="total">
+                        <div class="row">
+                            <div class="col-7">
+                                <span style="font-style: italic;" t-esc="doc.terbilang_idr()"/>
+                            </div>
+                            <div class="col-5">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td style="padding: 1px; border: 1px solid white;" name="td_subtotal_label">TOTAL</td>
+                                        <td class="text-right" style="padding: 1px; border: 1px solid white;">
+                                            <span t-field="doc.amount_total"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td name="td_dp_label" style="padding: 1px; border: 1px solid white;">DPP</td>
+                                        <td class="text-right" style="padding: 1px; border: 1px solid white;">
+                                            <span t-field="doc.amount_untaxed"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td name="td_taxable_label" style="padding: 1px; border: 1px solid white;">PPN</td>
+                                        <td class="text-right" style="padding: 1px; border: 1px solid white;">
+                                            <span t-field="doc.amount_tax"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td name="td_amount_total_label" style="border: 1px solid white; padding: 1px;">J.BAYAR</td>
+                                        <td class="text-right" style="border: 1px solid white; padding: 1px;">
+                                            <span t-field="doc.amount_residual"
+                                                t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <span style="font-Size:12px">NB : pembayaran dengan cek/BG sah setelah diuangkan</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Penerima</span>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <span>........................</span>
+                        </div>
+                        <div class="col-4">
+                            <span>Jakarta, </span>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <span>Hendri Wijaya S.Farm Apt.</span>
+                        </div>
+                        <div class="col-4">
+                            <span>Bagian Gudang</span>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <span>...................................</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        Print : <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/>
+                    </div>
+                </div>
+             </t>
+        </template>
+    </data>
+</odoo>
